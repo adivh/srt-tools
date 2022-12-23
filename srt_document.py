@@ -1,6 +1,8 @@
 import zipfile
 import xml.etree.ElementTree
 
+import docx2txt
+
 class SRT_Document:
 
     def __init__(self, path):
@@ -36,7 +38,7 @@ class SRT_Document:
                     for cell in row.iter(CELL):
                         self.items.append(''.join(node.text for node in cell.iter(TEXT)))
         else:
-            raise ValueError("File type {} not yet supported".format(file_type))
+            raise ValueError("File type {} not yet supported\r\nUse\r\n\r\n\tlowriter --convert-to docx documentname.doc\r\n\r\nto convert.".format(file_type))
 
 
 if __name__ == "__main__":
