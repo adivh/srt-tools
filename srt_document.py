@@ -18,20 +18,25 @@ class SRT_Document:
         return len(self.items)
 
     def _load(self, path):
-        WORD_NAMESPACE = '{http://schemas.openxmlformats.org/wordprocessingml/2006/main}'
-        PARA = WORD_NAMESPACE + 'p'
-        TEXT = WORD_NAMESPACE + 't'
-        TABLE = WORD_NAMESPACE + 'tbl'
-        ROW = WORD_NAMESPACE + 'tr'
-        CELL = WORD_NAMESPACE + 'tc'
+        file_type = path.split(".")[1].lower()
 
-        with zipfile.ZipFile(path) as docx:
-            tree = xml.etree.ElementTree.XML(docx.read('word/document.xml'))
+        if file_type == "docx":
+            WORD_NAMESPACE = '{http://schemas.openxmlformats.org/wordprocessingml/2006/main}'
+            PARA = WORD_NAMESPACE + 'p'
+            TEXT = WORD_NAMESPACE + 't'
+            TABLE = WORD_NAMESPACE + 'tbl'
+            ROW = WORD_NAMESPACE + 'tr'
+            CELL = WORD_NAMESPACE + 'tc'
 
-        for table in tree.iter(TABLE):
-            for row in table.iter(ROW):
-                for cell in row.iter(CELL):
-                    self.items.append(''.join(node.text for node in cell.iter(TEXT)))
+            with zipfile.ZipFile(path) as docx:
+                tree = xml.etree.ElementTree.XML(docx.read('word/document.xml'))
+
+            for table in tree.iter(TABLE):
+                for row in table.iter(ROW):
+                    for cell in row.iter(CELL):
+                        self.items.append(''.join(node.text for node in cell.iter(TEXT)))
+        else:
+            raise ValueError("File type {} not yet supported".format(file_type))
 
 
 if __name__ == "__main__":
