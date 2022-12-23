@@ -1,8 +1,6 @@
 import zipfile
 import xml.etree.ElementTree
 
-import docx2txt
-
 class SRT_Document:
 
     def __init__(self, path):
