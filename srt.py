@@ -20,14 +20,25 @@ class SRT:
 
             self.column_count = self.column_count + 1
             
-
-        print(self.column_count)
         
         if len(srt_document) % self.column_count != 0:
+
+            count = 0
+            for item in srt_document.items:
+                count = count + 1
+                print (item)
+                if count == self.column_count:
+                    count = 0
+                    print("-----")
+
             raise Exception("Document has no valid structure: ({})".format(self.column_count))
 
         for i in range(0, int(len(srt_document) / self.column_count)):
             index = i * self.column_count
+            
+            if srt_document.items[index] == "":
+                continue
+
             self.times.append(self._convert_time(srt_document.items[index]))
             self.speakers.append(srt_document.items[index + 1])
             self.original_texts.append(srt_document.items[index + 2])
@@ -65,19 +76,25 @@ class SRT:
             res = res + "\n\r" + str(i + 1) + "\n\r" + self.times[i] + "\n\r" + self.speakers[i] + "\n\r" + self.original_texts[i] + "\n\r" + self.translated_texts[i] + "\n\r"
         return res
 
-    def format(self, index=True, time=True, speaker=False, original_text=False, translated_text=True):
+    def format(self, index=True, speaker=False, original_text=False, translated_text=True):
         # if nothing is True
         if not index and not time and not speaker and not original_text and not translated_text:
             return ""
         
         res = ""
+        index_offset = 1
+
         for i in range(0, len(self.times)):
             res = res + "\n\r"
-            if index:
-                res = res + str(i + 1) + "\n\r"
 
-            if time:
-                res = res + self.times[i] + "\n\r"
+            if self.times[i] == "":
+                index_offset = index_offset - 1
+                continue
+
+            if index:
+                res = res + str(i + index_offset) + "\n\r"
+
+            res = res + self.times[i] + "\n\r"
 
             if speaker:
                 res = res + self.speakers[i] + "\n\r"
