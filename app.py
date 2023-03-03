@@ -37,9 +37,11 @@ def main():
         f = file.split(".")
         if len(f) == 2:
             if f[1].lower() == "docx":
+                print("found {}".format(src + file))
                 srt_doc = srt_document.SRT_Document(src + file)
                 srt_val = srt.SRT(srt_doc)
-                writer.Writer.save_output(dst + f[0] + ".srt", srt_val.format())
+                output = srt_val.format()
+                writer.Writer.save_output(dst + f[0] + ".srt", output)
         
 
 if __name__ == "__main__":

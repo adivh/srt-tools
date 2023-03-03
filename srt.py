@@ -23,14 +23,17 @@ class SRT:
         values = time.split(" ")
 
         if len(values) < 2:
+            print("faulty time: {}".format(time))
             raise ValueError(time)
 
         res = reg.fullmatch(values[0])
         if res is None:
+            print("faulty time: {}".format(time))
             raise ValueError(time)
 
         res = reg.fullmatch(values[1])
         if res is None:
+            print("faulty time: {}".format(time))
             raise ValueError(time)
 
         return "{},{:0<3} --> {},{:0<3}".format(values[0][:8], values[0][9:], values[1][:8], values[1][9:])
