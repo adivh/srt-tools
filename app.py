@@ -1,3 +1,4 @@
+import name_handler
 import srt
 import srt_document
 import writer
@@ -35,6 +36,9 @@ def main():
     if not os.path.exists(src) or not os.path.exists(dst):
         exit()
 
+    if args.names != None:
+        name_handler.initialize ( args.names )
+
     dir = os.listdir(args.source_dir)
 
     docx_files = [file for file in dir if file.split(".")[-1].lower() == "docx"]
@@ -46,7 +50,7 @@ def main():
         srt_val = srt.SRT(srt_doc)
         output = srt_val.format()
 
-        file_name = dst + docx_files[i][:-5]
+        file_name = dst + name_handler.change_name(docx_files[i][:-5])
 
         if args.language != None:
             file_name = file_name + "-" + args.language + ".srt"
