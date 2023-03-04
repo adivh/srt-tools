@@ -8,6 +8,7 @@ class SRT:
         self.original_texts = []
         self.translated_texts = []
         self.column_count = 0
+        self.endl = "\n"
 
         _times_found = 0
         for i in range(0, int(len(srt_document))):
@@ -73,7 +74,7 @@ class SRT:
     def __str__(self):
         res = ""
         for i in range(0, len(self.times)):
-            res = res + "\n\r" + str(i + 1) + "\n\r" + self.times[i] + "\n\r" + self.speakers[i] + "\n\r" + self.original_texts[i] + "\n\r" + self.translated_texts[i] + "\n\r"
+            res = res + self.endl + str(i + 1) + self.endl + self.times[i] + self.endl + self.speakers[i] + self.endl + self.original_texts[i] + self.endl + self.translated_texts[i] + self.endl
         return res
 
     def format(self, index=True, speaker=False, original_text=False, translated_text=True):
@@ -85,24 +86,25 @@ class SRT:
         index_offset = 1
 
         for i in range(0, len(self.times)):
-            res = res + "\n\r"
 
             if self.times[i] == "":
                 index_offset = index_offset - 1
                 continue
 
             if index:
-                res = res + str(i + index_offset) + "\n\r"
+                res = res + str(i + index_offset) + self.endl
 
-            res = res + self.times[i] + "\n\r"
+            res = res + self.times[i] + self.endl
 
             if speaker:
-                res = res + self.speakers[i] + "\n\r"
+                res = res + self.speakers[i] + self.endl
 
             if original_text:
-                res = res + self.original_texts[i] + "\n\r"
+                res = res + self.original_texts[i] + self.endl
 
             if translated_text:
-                res = res + self.translated_texts[i] + "\n\r"
+                res = res + self.translated_texts[i] + self.endl
+
+            res = res + self.endl
 
         return res
