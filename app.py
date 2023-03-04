@@ -3,6 +3,7 @@ import srt_document
 import writer
 
 import argparse
+import math
 import os
 
 def main():
@@ -13,6 +14,8 @@ def main():
 
     parser.add_argument("source_dir")
     parser.add_argument("destination_dir")
+    parser.add_argument("-n", "--names")
+    parser.add_argument("-l", "--language")
     args = parser.parse_args()
 
     src = args.source_dir
@@ -33,15 +36,23 @@ def main():
         exit()
 
     dir = os.listdir(args.source_dir)
-    for file in dir:
-        f = file.split(".")
-        if len(f) == 2:
-            if f[1].lower() == "docx":
-                print("found {}".format(src + file))
-                srt_doc = srt_document.SRT_Document(src + file)
-                srt_val = srt.SRT(srt_doc)
-                output = srt_val.format()
-                writer.Writer.save_output(dst + f[0] + ".srt", output)
+
+    docx_files = [file for file in dir if file.split(".")[-1].lower() == "docx"]
+    printed_digits_count = int (math.log(len (docx_files), 10)) + 1
+
+    for i in range (0, len (docx_files)):
+        print ("[{:0>{length}}/{}] {}".format (i + 1, len (docx_files), src + docx_files[i], length=printed_digits_count))
+        srt_doc = srt_document.SRT_Document(src + docx_files[i])
+        srt_val = srt.SRT(srt_doc)
+        output = srt_val.format()
+
+        file_name = dst + docx_files[i][:-5]
+
+        if args.language != None:
+            file_name = file_name + "-" + args.language + ".srt"
+        else:
+            file_name = file_name + ".srt"
+        writer.Writer.save_output(file_name, output)
         
 
 if __name__ == "__main__":
