@@ -18,7 +18,7 @@ class SRT_Document:
         return len(self.items)
 
     def _load(self, path):
-        file_type = path.split(".")[1].lower()
+        file_type = path.split(".")[-1].lower()
 
         if file_type == "docx":
             WORD_NAMESPACE = '{http://schemas.openxmlformats.org/wordprocessingml/2006/main}'
